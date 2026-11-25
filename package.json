@@ -1,0 +1,56 @@
+{
+    "name": "easyflow-whiteboard",
+    "version": "1.0.0",
+    "description": "Embeddable React whiteboard on Fabric.js: drawing tools, connectors, minimap, light/dark themes, and your own React components as nodes.",
+    "main": "dist/index.js",
+    "types": "dist/index.d.ts",
+    "style": "dist/styles.css",
+    "files": [
+        "dist"
+    ],
+    "sideEffects": [
+        "*.css",
+        "./dist/lib/fabric-*.js",
+        "./dist/components/whiteboard/whiteboard.js"
+    ],
+    "keywords": [
+        "whiteboard",
+        "canvas",
+        "fabric",
+        "fabricjs",
+        "react",
+        "drawing",
+        "diagram",
+        "infinite-canvas",
+        "nodes",
+        "connectors"
+    ],
+    "author": "Muhammad Hamza",
+    "license": "MIT",
+    "scripts": {
+        "build:ts": "tsc",
+        "build:css": "tailwindcss -c ./tailwind.config.js -i ./src/styles.css -o ./dist/styles.css --minify",
+        "build": "npm run build:ts && npm run build:css",
+        "release:patch": "npm run build && npm version patch && npm publish",
+        "release:minor": "npm run build && npm version minor && npm publish",
+        "release:major": "npm run build && npm version major && npm publish",
+        "prepublishOnly": "npm run build"
+    },
+    "peerDependencies": {
+        "fabric": "^7.0.0",
+        "react": "^18.0.0 || ^19.0.0",
+        "react-dom": "^18.0.0 || ^19.0.0",
+        "zustand": "^5.0.0"
+    },
+    "dependencies": {
+        "lucide-react": "^0.563.0"
+    },
+    "devDependencies": {
+        "@tailwindcss/cli": "^4.2.1",
+        "@types/fabric": "^5.3.11",
+        "@types/node": "^20.19.37",
+        "@types/react": "^19.0.0",
+        "@types/react-dom": "^19.0.0",
+        "typescript": "^5.0.0"
+    }
+}

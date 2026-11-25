@@ -1,0 +1,137 @@
+/* Layer order first, so the scoped reset below always loses to utilities. */
+@layer theme, base, components, utilities;
+
+/* Instead of @import "tailwindcss" */
+@import "tailwindcss/theme" layer(theme);
+@import "tailwindcss/utilities" layer(utilities);
+/* ↑ Deliberately omits @import "tailwindcss/preflight" */
+
+/*
+ * Minimal reset scoped to the whiteboard. Without Tailwind preflight in the
+ * host app, buttons and inputs otherwise keep the browser's grey background,
+ * borders and padding. :where() keeps specificity at zero and the base layer
+ * sits below utilities, so any class on an element still wins.
+ */
+@layer base {
+  :where(.easyflow-whiteboard) :where(*, ::before, ::after) {
+    box-sizing: border-box;
+    border-width: 0;
+    border-style: solid;
+  }
+
+  :where(.easyflow-whiteboard) :where(button, input, select, textarea) {
+    font: inherit;
+    color: inherit;
+    background-color: transparent;
+    margin: 0;
+    padding: 0;
+  }
+
+  :where(.easyflow-whiteboard) :where(button, [role="button"]) {
+    cursor: pointer;
+  }
+
+  :where(.easyflow-whiteboard) :where(button:disabled) {
+    cursor: default;
+  }
+}
+
+/* Scope everything under .easyflow-whiteboard */
+.easyflow-whiteboard {
+  isolation: isolate;
+  position: relative;
+  width: 100%;
+  height: 100%;
+
+  /* Radius scale */
+  --radius: 0.625rem;
+  --radius-sm: calc(var(--radius) - 4px);
+  --radius-md: calc(var(--radius) - 2px);
+  --radius-lg: var(--radius);
+  --radius-xl: calc(var(--radius) + 4px);
+  --radius-2xl: calc(var(--radius) + 8px);
+  --radius-3xl: calc(var(--radius) + 12px);
+  --radius-4xl: calc(var(--radius) + 16px);
+
+  /* ── Theme tokens (dark, the default) ──────────────────────────────────── */
+  --wb-bg: #0b0b0b;                     /* board */
+  --wb-grid-dot: rgba(255, 255, 255, 0.2);
+  --wb-surface: #000000;                /* toolbar, zoom pill, minimap */
+  --wb-panel: #1A1A1E;                  /* properties panel */
+  --wb-popover: #121214;                /* insert menu */
+  --wb-popover-shadow: rgba(0, 0, 0, 0.6);
+  --wb-toolbar-border: #A1A1A1;
+  --wb-tool-active: #A1A1A1;
+  --wb-skeleton-bg: rgba(5, 5, 5, 0.97);
+  --wb-preview-bg: #191919;             /* connector style preview */
+  --wb-preview-node: #2B2B2E;
+  --wb-text-strong: #FBFBFB;
+  --wb-text-muted: #A6A6A9;
+  --wb-tint-05: rgba(255, 255, 255, 0.05);
+  --wb-tint-10: rgba(255, 255, 255, 0.1);
+  --wb-tint-12: rgba(255, 255, 255, 0.12);
+  --wb-tint-15: rgba(255, 255, 255, 0.15);
+  --wb-accent: #0D8EFF;                 /* selection outline */
+
+  color-scheme: dark;
+}
+
+/*
+ * Light theme. The UI is built from the neutral/gray scales plus white text,
+ * so the scales are mirrored here (900 ↔ 50, white ↔ near-black) and every
+ * component flips without per-component overrides. Brand colours are untouched.
+ */
+.easyflow-whiteboard[data-theme="light"] {
+  --wb-bg: #F7F7F8;
+  --wb-grid-dot: rgba(0, 0, 0, 0.16);
+  --wb-surface: #FFFFFF;
+  --wb-panel: #FFFFFF;
+  --wb-popover: #FFFFFF;
+  --wb-popover-shadow: rgba(0, 0, 0, 0.14);
+  --wb-toolbar-border: #D4D4D8;
+  --wb-tool-active: #E4E4E7;
+  --wb-skeleton-bg: rgba(255, 255, 255, 0.97);
+  --wb-preview-bg: #F4F4F5;
+  --wb-preview-node: #E4E4E7;
+  --wb-text-strong: #18181B;
+  --wb-text-muted: #71717A;
+  --wb-tint-05: rgba(0, 0, 0, 0.04);
+  --wb-tint-10: rgba(0, 0, 0, 0.08);
+  --wb-tint-12: rgba(0, 0, 0, 0.08);
+  --wb-tint-15: rgba(0, 0, 0, 0.1);
+
+  --color-white: oklch(21% 0.006 285.885);
+
+  --color-neutral-50:  oklch(14.5% 0 0);
+  --color-neutral-100: oklch(20.5% 0 0);
+  --color-neutral-200: oklch(26.9% 0 0);
+  --color-neutral-300: oklch(37.1% 0 0);
+  --color-neutral-400: oklch(50% 0 0);
+  --color-neutral-500: oklch(62% 0 0);
+  --color-neutral-600: oklch(80% 0 0);
+  --color-neutral-700: oklch(87% 0 0);
+  --color-neutral-800: oklch(92.2% 0 0);
+  --color-neutral-900: oklch(97% 0 0);
+  --color-neutral-950: oklch(98.5% 0 0);
+
+  --color-gray-50:  oklch(14.5% 0.004 265);
+  --color-gray-100: oklch(21% 0.006 265);
+  --color-gray-200: oklch(27.8% 0.01 265);
+  --color-gray-300: oklch(37.3% 0.02 265);
+  --color-gray-400: oklch(50% 0.02 265);
+  --color-gray-500: oklch(58% 0.02 265);
+  --color-gray-600: oklch(75% 0.015 265);
+  --color-gray-700: oklch(87.2% 0.01 265);
+  --color-gray-800: oklch(92.8% 0.006 265);
+  --color-gray-900: oklch(96.7% 0.003 265);
+  --color-gray-950: oklch(98.5% 0.002 265);
+
+  color-scheme: light;
+}
+
+/* ── Custom HTML nodes ─────────────────────────────────────────────────────── */
+/* Selection outline on the consumer's root element, so it follows its border radius. */
+.easyflow-whiteboard .wb-node[data-selected] > :first-child {
+  outline: var(--wb-node-outline, 2px) solid var(--wb-accent);
+  outline-offset: 2px;
+}
